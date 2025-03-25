@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/prefer-ts-expect-error */
 import clsx from "clsx";
 import { ComponentPropsWithoutRef } from "react";
+import { calculateNextValue, calculateStatus } from "../lib/tictactoe/helpers";
 
 type SquareProps = {
   isWinningSquare?: boolean;
@@ -37,8 +38,6 @@ type BoardProps = {
   squares: SquareValue[];
   winningSquares?: number[];
   onclick?: (index: number) => void;
-
-  //...
 };
 
 const Board = ({ squares, winningSquares, onclick }: BoardProps) => {
@@ -57,10 +56,25 @@ const Board = ({ squares, winningSquares, onclick }: BoardProps) => {
   );
 };
 
+type GameInfoProps = {
+  status: string;
+};
+
+const GameInfo = ({ status }: GameInfoProps) => {
+  return (
+    <div className="game-info">
+      <p>{status}</p>
+    </div>
+  );
+};
+
 const Game = () => {
   const squares = getDefaultSquares();
+  const nextPlayer = calculateNextValue(squares);
+  const status = calculateStatus(squares, nextPlayer);
   return (
     <div className="game">
+      <GameInfo status={status} />
       <Board squares={squares} />
     </div>
   );
